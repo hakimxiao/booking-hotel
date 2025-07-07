@@ -9,5 +9,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {strategy: "jwt"},
   pages: {
     signIn: "/signin"
+  },
+  // membuat role base access control :
+  callbacks: {
+    jwt({token, user}) {
+      if (user) token.role = user.role;
+      return token;
+    },
+    session({session, token}) {
+      session.user.id = token.sub;
+      session.user.role = token.role;
+      return session;
+    }
   }
 })
