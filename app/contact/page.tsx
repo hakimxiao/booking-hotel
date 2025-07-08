@@ -5,6 +5,7 @@ import {
     IoCallOutline,
     IoLocationOutline
 } from "react-icons/io5";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
     title: "Contact Mimo"
@@ -50,7 +51,7 @@ const ContactPage = () => {
                             </li>
                         </ul>
                     </div>
-                    {/* Contact Form */}
+                    <ContactForm />
                 </div>
             </div>
         </div>
