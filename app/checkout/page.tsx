@@ -2,7 +2,7 @@ import React from 'react'
 
 const CheckoutPage = () => {
     return (
-        <div>CheckoutPage</div>
+        <div className='py-20 mt-10'>CheckoutPage</div>
     )
 }
 
