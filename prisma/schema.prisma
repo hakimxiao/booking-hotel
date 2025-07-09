@@ -118,7 +118,7 @@ model Account {
   @@id([provider, providerAccountId])
 }
 
-model contact {
+model Contact {
   id        String   @id @default(cuid())
   name      String
   email     String
