@@ -5,7 +5,7 @@ import { ContactMessage } from "@/lib/action";
 
 
 const ContactForm = () => {
-    const [state, formAction] = useActionState(ContactMessage, null)
+    const [state, formAction, isPending] = useActionState(ContactMessage, null)
 
     return (
         <div className="bg-white p-8 rounded-sm shadow-sm">
@@ -44,7 +44,9 @@ const ContactForm = () => {
                         </div>
                     </div>
                 </div>
-                <button type="submit" className="px-10 py-4 text-center font-semibold text-white w-full bg-orange-400 rounded-sm hover:bg-orange-500 cursor-pointer">Send Message</button>
+                <button type="submit" className="px-10 py-4 text-center font-semibold text-white w-full bg-orange-400 rounded-sm hover:bg-orange-500 cursor-pointer">
+                    {isPending ? "Sending..." : "Send Message"}
+                </button>
             </form>
         </div>
     )
