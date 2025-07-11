@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from 'react';
 import { type PutBlobResult } from '@vercel/blob';
-import { IoCloudUploadOutline } from 'react-icons/io5';
+import { IoCloudUploadOutline, IoTrashOutline } from 'react-icons/io5';
 import Image from 'next/image';
 import { BarLoader } from 'react-spinners';
 
@@ -10,7 +10,7 @@ const CreateForm = () => {
     const inputFileRef = useRef<HTMLInputElement>(null);
     const [image, setImage] = useState("");
     const [message, setMessage] = useState("");
-    const [pending, setTransition] = useTransition();
+    const [pending, startTransition] = useTransition();
 
     const handleUpload = () => {
         if (!inputFileRef.current?.files) return null;
@@ -18,7 +18,7 @@ const CreateForm = () => {
         const formData = new FormData();
         formData.set("file", file);
 
-        setTransition(async () => {
+        startTransition(async () => {
             // hit API
             try {
                 const response = await fetch("/api/upload", {
@@ -32,6 +32,19 @@ const CreateForm = () => {
                 }
                 const img = data as PutBlobResult;
                 setImage(img.url);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    };
+
+    const deleteImage = (image: string) => {
+        startTransition(async () => {
+            try {
+                await fetch(`/api/upload/?imageUrl=${image}`, {
+                    method: "DELETE"
+                });
+                setImage("");
             } catch (error) {
                 console.log(error);
             }
@@ -70,15 +83,21 @@ const CreateForm = () => {
                             {pending ? (
                                 <BarLoader />
                             ) : null}
-                            <IoCloudUploadOutline className='size-8' />
-                            <div className="flex flex-col items-center justify-center">
-                                <p className="mb-1 text-sm font-bold">Select Image</p>
-                                {message ? (
-                                    <p className='text-xs text-red-500'>{message}</p>
-                                ) : (
-                                    <p className="text-xs">SVG, PNG, JPG, GIF or Other (Max: 4MB)</p>
-                                )}
-                            </div>
+                            {image ? (
+                                <button type='button' onClick={() => deleteImage(image)} className='flex items-center justify-center bg-transparent size-6 rounded-sm absolute right-1 top-1 text-white hover:bg-red-400'>
+                                    <IoTrashOutline className='size-4 text-transparent hover:text-white' />
+                                </button>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center">
+                                    <IoCloudUploadOutline className='size-8' />
+                                    <p className="mb-1 text-sm font-bold">Select Image</p>
+                                    {message ? (
+                                        <p className='text-xs text-red-500'>{message}</p>
+                                    ) : (
+                                        <p className="text-xs">SVG, PNG, JPG, GIF or Other (Max: 4MB)</p>
+                                    )}
+                                </div>
+                            )}
                         </div>
                         {!image ? (
                             <input type="file" id='input-file' ref={inputFileRef} onChange={handleUpload} className='hidden' />

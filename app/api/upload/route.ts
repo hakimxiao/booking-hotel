@@ -1,4 +1,4 @@
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 export const PUT = async(request: Request) => {
@@ -23,4 +23,13 @@ export const PUT = async(request: Request) => {
     });
 
     return NextResponse.json(blob);
+}
+
+export const DELETE = async(request: Request) => {
+    const {searchParams} = new URL(request.url);
+    const imageUrl = searchParams.get("imageUrl") as string;
+
+    await del(imageUrl);
+
+    return NextResponse.json({status: 200});
 }
