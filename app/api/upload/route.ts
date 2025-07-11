@@ -9,7 +9,7 @@ export const PUT = async(request: Request) => {
         return NextResponse.json({message: "File Is Required"}, {status: 400});
     }
 
-    if(file.size > 400000) {
+    if(file.size < 400000) {
         return NextResponse.json({message: "File must be less than 4MB"}, {status: 400});
     }
 
