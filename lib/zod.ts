@@ -1,4 +1,13 @@
-import {object, string} from 'zod';
+import {object, string, coerce, array} from 'zod';
+
+
+export const RoomSchema = object({
+    name: string().min(1),
+    description: string().min(50),
+    capacity: coerce.number().gt(0),        // coerce : U/ string ke number || gt : greater than
+    price: coerce.number().gt(0),
+    amenities: array(string()).nonempty()   // terdapat array yang didalamnya string
+})
 
 export const contactSchema = object({
     name: 
