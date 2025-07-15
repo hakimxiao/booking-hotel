@@ -8,7 +8,6 @@ import Image from "next/image";
 import { BarLoader } from "react-spinners";
 import { Amenities } from "@prisma/client";
 import { saveRoom } from "@/lib/action";
-import { error } from "console";
 import clsx from "clsx";
 
 const CreateForm = ({ amenities }: { amenities: Amenities[] }) => {
