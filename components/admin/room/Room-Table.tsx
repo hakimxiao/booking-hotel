@@ -1,6 +1,12 @@
-import React from "react";
+import { getRooms } from "@/lib/data";
+import Image from "next/image";
+import { formatDate, formatCurrency } from "@/lib/utils";
 
-const RoomTable = () => {
+const RoomTable = async () => {
+  const rooms = await getRooms();
+
+  if (!rooms?.length) return <p>No Rooms Found</p>;
+
   return (
     <div className="bg-white p-4 mt-5 shadow-sm">
       <table className="w-full divide-y divide-gray-200">
@@ -24,13 +30,27 @@ const RoomTable = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          <tr className="hover:bg-gray-100">
-            <td className="px-6 py-4"></td>
-            <td className="px-6 py-4"></td>
-            <td className="px-6 py-4"></td>
-            <td className="px-6 py-4"></td>
-            <td className="px-6 py-4 text-right"></td>
-          </tr>
+          {rooms.map((room, index) => (
+            <tr className="hover:bg-gray-100" key={index}>
+              <td className="px-6 py-4">
+                <div className="h-20 w-32 relative">
+                  <Image
+                    src={room.image}
+                    fill
+                    sizes="20vw"
+                    alt="room image"
+                    className="object-cover"
+                  />
+                </div>
+              </td>
+              <td className="px-6 py-4">{room.name}</td>
+              <td className="px-6 py-4">{formatCurrency(room.price)}</td>
+              <td className="px-6 py-4">
+                {formatDate(room.createdAt.toString())}
+              </td>
+              <td className="px-6 py-4 text-right"></td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
