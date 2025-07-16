@@ -67,6 +67,8 @@ const EditForm = ({
     null
   );
 
+  const checkedAmenities = room.RoomAmenities.map((item) => item.amenitiesId);
+
   return (
     <form action={formAction}>
       <div className="grid md:grid-cols-12 gap-5">
@@ -107,6 +109,7 @@ const EditForm = ({
                   type="checkbox"
                   name="amenities"
                   defaultValue={item.id}
+                  defaultChecked={checkedAmenities.includes(item.id)}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border border-gray-300 rounded"
                   placeholder="Room Name"
                 />
