@@ -8,11 +8,18 @@ import Image from "next/image";
 import { BarLoader } from "react-spinners";
 import { Amenities } from "@prisma/client";
 import { saveRoom } from "@/lib/action";
+import { RoomProps } from "@/types/room";
 import clsx from "clsx";
 
-const EditForm = ({ amenities }: { amenities: Amenities[] }) => {
+const EditForm = ({
+  amenities,
+  room,
+}: {
+  amenities: Amenities[];
+  room: RoomProps;
+}) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(room.image);
   const [message, setMessage] = useState("");
   const [pending, startTransition] = useTransition();
 
@@ -68,6 +75,7 @@ const EditForm = ({ amenities }: { amenities: Amenities[] }) => {
             <input
               type="text"
               name="name"
+              defaultValue={room.name}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
               placeholder="Room Name"
             />
@@ -81,6 +89,7 @@ const EditForm = ({ amenities }: { amenities: Amenities[] }) => {
             <textarea
               name="description"
               rows={8}
+              defaultValue={room.description}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
               placeholder="Description"
             ></textarea>
@@ -92,6 +101,7 @@ const EditForm = ({ amenities }: { amenities: Amenities[] }) => {
           </div>
           <div className="mb-4 grid md:grid-cols-3">
             {amenities.map((item) => (
+              // amenitis bukan default value tapi default check tapi kita skip dulu
               <div className="flex items-center mb-4" key={item.id}>
                 <input
                   type="checkbox"
@@ -164,6 +174,7 @@ const EditForm = ({ amenities }: { amenities: Amenities[] }) => {
             <input
               type="text"
               name="capacity"
+              defaultValue={room.capacity}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
               placeholder="Capacity"
             />
@@ -177,6 +188,7 @@ const EditForm = ({ amenities }: { amenities: Amenities[] }) => {
             <input
               type="text"
               name="price"
+              defaultValue={room.price}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
               placeholder="Price..."
             />
