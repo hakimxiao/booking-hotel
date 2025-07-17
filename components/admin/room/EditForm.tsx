@@ -7,7 +7,7 @@ import { IoCloudUploadOutline, IoTrashOutline } from "react-icons/io5";
 import Image from "next/image";
 import { BarLoader } from "react-spinners";
 import { Amenities } from "@prisma/client";
-import { saveRoom } from "@/lib/action";
+import { updateRoom } from "@/lib/action";
 import { RoomProps } from "@/types/room";
 import clsx from "clsx";
 
@@ -63,7 +63,7 @@ const EditForm = ({
   };
 
   const [state, formAction, isPending] = useActionState(
-    saveRoom.bind(null, image),
+    updateRoom.bind(null, image, room.id),
     null
   );
 
