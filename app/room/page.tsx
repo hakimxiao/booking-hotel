@@ -2,6 +2,7 @@ import HeaderSection from "@/components/HeaderSection";
 import Main from "@/components/Main";
 import { type Metadata } from "next";
 import { Suspense } from "react";
+import RoomSkeleton from "@/components/skeletons/RoomSkeleton";
 
 export const metadata: Metadata = {
   title: "Roooms & Rates",
@@ -16,7 +17,7 @@ const RoomPage = () => {
         subTitle="Lorem ipsum dolor sit amet."
       />
       <div className="mt-10 px-4">
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<RoomSkeleton />}>
           <Main />
         </Suspense>
       </div>

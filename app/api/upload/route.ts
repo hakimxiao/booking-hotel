@@ -9,8 +9,8 @@ export const PUT = async(request: Request) => {
         return NextResponse.json({message: "File Is Required"}, {status: 400});
     }
 
-    if(file.size < 400000) {
-        return NextResponse.json({message: "File must be less than 4MB"}, {status: 400});
+    if(file.size > 1200000) {
+        return NextResponse.json({message: "File must be less than 12MB"}, {status: 400});
     }
 
     if(!file.type.startsWith("image/")) {
