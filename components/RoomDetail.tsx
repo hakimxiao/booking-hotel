@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { IoCheckmark, IoPeopleOutline } from "react-icons/io5";
 import { formatCurrency } from "@/lib/utils";
+import ReserveForm from "./ReserveForm";
 
 const RoomDetail = async ({ roomId }: { roomId: string }) => {
   const room = await getRoomDetailById(roomId);
@@ -51,6 +52,7 @@ const RoomDetail = async ({ roomId }: { roomId: string }) => {
             </div>
           </div>
           {/* Reservation Form */}
+          <ReserveForm />
         </div>
       </div>
     </div>
