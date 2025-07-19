@@ -9,6 +9,11 @@ export const RoomSchema = object({
     amenities: array(string()).nonempty()   // terdapat array yang didalamnya string
 })
 
+export const ReserveSchema = object({
+    name: string().min(1),
+    phone: string().min(10),
+})
+
 export const contactSchema = object({
     name: 
         string()
