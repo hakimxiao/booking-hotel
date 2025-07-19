@@ -3,6 +3,7 @@
 import DatePicker from "react-datepicker";
 import { addDays } from "date-fns";
 import { useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
 
 const ReserveForm = () => {
   const StartDate = new Date();
