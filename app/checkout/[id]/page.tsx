@@ -1,5 +1,10 @@
 import CheckoutDetail from "@/components/CheckoutDetail";
-import React from "react";
+import { Suspense } from "react";
+import { type Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Reservation Sumary",
+};
 
 const CheckoutPage = async ({
   params,
@@ -10,8 +15,10 @@ const CheckoutPage = async ({
 
   return (
     <div className="max-w-screen-xl px-4 mx-auto py-20 mt-12">
-      <h1>Checkout Page</h1>
-      <CheckoutDetail reservationId={reservationId} />
+      <h1 className="text-2xl font-semibold mb-8">Reservation Sumary</h1>
+      <Suspense fallback={<p>Loading ...</p>}>
+        <CheckoutDetail reservationId={reservationId} />
+      </Suspense>
     </div>
   );
 };
