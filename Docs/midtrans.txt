@@ -1,0 +1,14 @@
+MIDTRANS | midtrans.com    
+    Midtrans Merupakan third party yang bermanfaat untuk melakukkan handle payment atau pembayaran.
+    Adapun untuk mitran sendiri terdapat 2 mode production & sandbox || production digunakan saat 
+    project sudah dalam kondisi production sedangkan sanbox digunakan jika program masih divase development.
+
+
+    Penggunaan  : 
+        1. Kita memerlukan mitran client id dan mitran server key :
+            goto -> setting -> access key -> copy 2 hal tersebut
+            * Karena client key akan kita akses dalam mode client ("use client") maka penamaan variabel .env nya disertakan NEXT_PUBLIC 
+              ini adalah prefix dari nextjs. !khusus di .env yang diakses via client.
+
+        2. Buat API untuk melakukkan handle generate token dan untuk menampilkan snap dari midtrans :
+            
