@@ -96,7 +96,7 @@ MIDTRANS | midtrans.com
 
                                     const { token } = await responseAPI.json();
                                     if (token) {
-                                        window.snap.pay(token); // masalah karena belum sup ts: solusi dideclare di atas
+                                        window.snap.pay({token}); // masalah karena belum sup ts: solusi dideclare di atas
                                     }
                                 } catch (error) {
                                     console.log(error);
@@ -115,4 +115,22 @@ MIDTRANS | midtrans.com
                         };
 
                         export default PaymentButton;
-  
+        
+        4. SNAP JS 
+            Snap JS ini kita butuhkan untuk menampilkan snap dari midtrans, panggil snapJs ini dibagian yang akan menampilkan Snap saat transaksinya sudah dilakukkan.
+            contoh disini didalam : app/checkout/[id]/page.tsx :
+                * Didalam page kita tinggal import Script dari : import Script from "next/script";
+                * Kemudian dibawah Suspense CheckoutDetail kita tinggal Panggil kompoenen Script dengan props src yang isinya seperti ini 
+                    <Script src="https://app.sanbox.midtrans.com/snap/snap.js" /> * jika mode procduction hapus aja sanbox nya.
+                * Kemudian kita butuh client key didalam Script nya dan juga strategy? lazyOnLoad
+                    <Script
+                        src="https://app.sanbox.midtrans.com/snap/snap.js"
+                        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+                        strategy="lazyOnload"
+                    />
+                * Saat diklik maka kalian akan dipilihkan menu untuk payment
+        
+        5. Emulator Sanbox Midtrans 
+            Ini digunakan untuk melakukkan uji coba sanbox uji coba pembayaran yang sudah kita order tadi di navbar payment simulator 
+            Kemudian kita akan diredirect ke halaman example.com karena kita blom memiliki halaman untuk handle status transaksi.
+                

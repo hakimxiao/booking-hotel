@@ -1,6 +1,7 @@
 import CheckoutDetail from "@/components/CheckoutDetail";
 import { Suspense } from "react";
 import { type Metadata } from "next";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Reservation Sumary",
@@ -19,6 +20,12 @@ const CheckoutPage = async ({
       <Suspense fallback={<p>Loading ...</p>}>
         <CheckoutDetail reservationId={reservationId} />
       </Suspense>
+      {/* jika mode production jukup hilangkan sanbox */}
+      <Script
+        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+        strategy="lazyOnload"
+      />
     </div>
   );
 };
