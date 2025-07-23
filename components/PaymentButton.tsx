@@ -43,3 +43,5 @@ const PaymentButton = ({ reservation }: { reservation: ReservationProps }) => {
 };
 
 export default PaymentButton;
+
+// AKAN MEMBUAT FETCH DARI MIDTERM KE API YANG AKAN MERUBAH STATUS PEMBAYARAN SESUAI KONDISI

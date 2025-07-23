@@ -133,4 +133,115 @@ MIDTRANS | midtrans.com
         5. Emulator Sanbox Midtrans 
             Ini digunakan untuk melakukkan uji coba sanbox uji coba pembayaran yang sudah kita order tadi di navbar payment simulator 
             Kemudian kita akan diredirect ke halaman example.com karena kita blom memiliki halaman untuk handle status transaksi.
+        
+        6. Membuat API untuk melakukkan handle update status yang akan dihit oleh midtrans 
+            api/payment/notification/route.ts : 
+                - step 1 : 
+                    import { NextResponse } from "next/server";
+                    import {prisma} from '@/lib/prisma';
+
+                    export const POST = async(request: Request) => {
+                        
+                    }
+                - step 2 (Menangkap Data Dari Midtrans | Karen midtrans belum suport ts maka kita buat type nya manual) : 
+                    @/type/payment.ts 
+                        export interface PaymentProps {
+                            // banyak response yang akan diberikan midtrans tapi kita mendeklarasikan yang dibutuhkkan saja
+                            transaction_status: string,
+                            payment_type? : string,
+                            fraud_status: string,
+                            status_code: string,
+                            gross_amount: string,
+                            signature_key: string,
+                            order_id: string
+                        }
+                - step 3 (melnajutkan step 1) : 
+                    import { NextResponse } from "next/server";
+                    import {prisma} from '@/lib/prisma';
+                    import { PaymentProps } from "@/types/payment";
+                    import crypto from 'crypto';
+
+                    export const POST = async(request: Request) => {
+                        const data: PaymentProps = await request.json();
+                        const reservationId = data.order_id;
+
+                        let responseData = null;
+
+                        const transactionStatus = data.transaction_status;
+                        const paymentType = data.payment_type || null;
+                        const fraudStatus = data.fraud_status;
+                        const statusCode = data.status_code;
+                        const grossAmount = data.gross_amount;
+                        const signatureKey = data.signature_key;
+
+                        // Karena signature_key berupa has dari midtrans maka kita hash juga untuk mengecek persanaab
+                        const hash = crypto.createHash("sha512").update(`${reservationId}${statusCode}${grossAmount}${process.env.MIDTRANS_SERVER_KEY}`).digest("hex");
+
+                        if(signatureKey !== hash ) {
+                            return NextResponse.json({error: "Missing Signature Key"}, {status: 400});
+                        }
+
+                        // capture: transfer bank
+                        if(transactionStatus == "capture") {
+                            if(fraudStatus == 'accept') {
+                                const transaction = await prisma.payment.update({
+                                    data: {
+                                        method: paymentType,
+                                        status: 'paid'
+                                    },
+                                    where: {reservationId}
+                                });
+                                responseData = transaction;
+                            }
+                        } else if (transactionStatus == 'settlement') {
+                            const transaction = await prisma.payment.update({
+                                    data: {
+                                        method: paymentType,
+                                        status: 'paid'
+                                    },
+                                    where: {reservationId}
+                                });
+                                responseData = transaction;
+                        } else if (transactionStatus == 'cancel' || transactionStatus == "deny" || transactionStatus == "expire") {
+                            const transaction = await prisma.payment.update({
+                                    data: {
+                                        method: paymentType,
+                                        status: 'failure'
+                                    },
+                                    where: {reservationId}
+                                });
+                                responseData = transaction;
+                        } else if (transactionStatus == 'pending') {
+                            const transaction = await prisma.payment.update({
+                                    data: {
+                                        method: paymentType,
+                                        status: 'pending'
+                                    },
+                                    where: {reservationId}
+                                });
+                                responseData = transaction;
+                        }
+                        return NextResponse.json({responseData}, {status: 200});
+                    }
+            
+            5. API yang kita buat untuk ngehandle perubahan status pembayaran itu tidak bisa diakses oleh public 
+               karena midtrans berasal dari luar ini akan di blok. SOLUSINYA ? 
+                * 1. Kita tinggal expose endpoint yang ada di folder notification/(yang akandihit midtrans) Tujuannya
+                     agar dapat di akses ke public.
+                  2. Pergi ke next.config : 
+                       async function() {
+                            return [
+                            {
+                                sources: "/api/payment/notification/:path*",
+                                headers: [
+                                { key: "Access-Control-Allow-Origin", value: "*"},
+                                { key: "Access-Control-Allow-Methods", value: "GET, POST"},
+                                { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"},
+                                ]
+                            }
+                            ]
+                        },
+                  3. Dengan demikian maka midtrans bisa melakukkan hit didalam api notification kita karena sudah bersifat public.
+                  
+
                 
