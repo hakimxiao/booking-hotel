@@ -61,6 +61,6 @@ export const POST = async(request: Request) => {
                 where: {reservationId}
             });
             responseData = transaction;
-    }
+    } 
     return NextResponse.json({responseData}, {status: 200});
 }

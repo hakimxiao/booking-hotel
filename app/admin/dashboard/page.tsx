@@ -1,6 +1,7 @@
 import { type Metadata } from "next";
-import DashboarCard from "@/components/admin/room/DashboarCard";
+import DashboarCard from "@/components/admin/DashboarCard";
 import { Suspense } from "react";
+import ReservationList from "@/components/admin/ReservationList";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -12,6 +13,9 @@ const DashboardPage = () => {
       <h1 className="text-4xl font-bold text-gray-800">Dashboard</h1>
       <Suspense fallback={<p>Loading Card ...</p>}>
         <DashboarCard />
+      </Suspense>
+      <Suspense fallback={<p>Loading Reservations ...</p>}>
+        <ReservationList />
       </Suspense>
     </div>
   );
