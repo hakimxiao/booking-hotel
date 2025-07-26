@@ -1,0 +1,12 @@
+PERHATIKAN HAL BERIKUT KARENA JIKA ADA MAKA PASTI GAGAL : 
+    1. PASTIKAN DI APLIKASI TIDAK MENGGUNAKAN TYPE ANY
+    2. PATIKAN TIDAK ADA LAGI VARIABEL YANG DI DECLARE TAPI TIDAK PERNAH KITA GUNAKAN
+    3. KITA PERLU MENDEFINISIKAN PRISMA GENERATE PADA FILE PACKAGE.JSON TAMBAHKAN DI CRIPT
+          "scripts": {
+                "dev": "next dev",
+                "build": "next build",
+                "start": "next start",
+                "lint": "next lint",
+                "postinstall": "prisma generate"
+            },
+    4. 

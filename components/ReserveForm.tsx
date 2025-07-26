@@ -21,10 +21,10 @@ const ReserveForm = ({
   const [startDate, setStartDate] = useState(StartDate);
   const [endDate, setEndDate] = useState(EndDate);
 
-  const handleDateChange = (dates: any) => {
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
+    setStartDate(start ?? StartDate); // null safety
+    setEndDate(end ?? EndDate);
   };
 
   const [state, formAction, isPending] = useActionState(
